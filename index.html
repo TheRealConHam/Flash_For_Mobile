@@ -62,4 +62,34 @@
   <button id="startBtn">Start Game</button>
 
   <!-- Ruffle Player -->
-  <ruffle-player id="player"></ruff
+  <ruffle-player id="player"></ruffle-player>
+
+  <script>
+    // Create Ruffle instance
+    const ruffle = window.RufflePlayer.newest();
+    const playerContainer = document.getElementById("player");
+    const player = ruffle.create_player();
+    playerContainer.appendChild(player);
+
+    const fileInput = document.getElementById("fileInput");
+    const startBtn = document.getElementById("startBtn");
+    let swfURL = null;
+
+    // Handle file selection
+    fileInput.addEventListener("change", (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+      swfURL = URL.createObjectURL(file);
+    });
+
+    // Start game on button click
+    startBtn.addEventListener("click", () => {
+      if (!swfURL) {
+        alert("Please select a SWF file first!");
+        return;
+      }
+      player.load({ url: swfURL });
+    });
+  </script>
+</body>
+</html>
