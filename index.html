@@ -8,6 +8,7 @@
   <!-- Local Ruffle -->
   <script src="ruffle/ruffle.js"></script>
 
+  <!-- Fullscreen on iPhone -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -25,17 +26,12 @@
       text-align: center;
     }
 
-    input, button {
+    input {
       margin: 0.5rem 0;
       padding: 0.5rem 1rem;
       font-size: 16px;
       border-radius: 8px;
       border: none;
-    }
-
-    button {
-      background-color: #1a73e8;
-      color: white;
       cursor: pointer;
     }
 
@@ -50,42 +46,29 @@
 </head>
 <body>
   <h1>Offline Flash Game Loader</h1>
-
   <input type="file" id="fileInput" accept="*/*">
-  <button id="startBtn">Start Game</button>
-
   <div id="playerContainer"></div>
 
   <script>
     const ruffle = window.RufflePlayer.newest();
     const container = document.getElementById("playerContainer");
-    const startBtn = document.getElementById("startBtn");
     const fileInput = document.getElementById("fileInput");
 
-    let swfURL = null;
-
-    // When the user selects a file
     fileInput.addEventListener("change", (event) => {
       const file = event.target.files[0];
       if (!file) return;
-      swfURL = URL.createObjectURL(file);
-    });
 
-    // Start the game inside the click handler
-    startBtn.addEventListener("click", () => {
-      if (!swfURL) {
-        alert("Please select a SWF file first!");
-        return;
-      }
+      // Create a URL for the local file
+      const swfURL = URL.createObjectURL(file);
 
       // Clear previous content
       container.innerHTML = "";
 
-      // Create the Ruffle player inside the click event (required for iOS)
+      // Create Ruffle player inside the change event
       const player = ruffle.create_player();
       container.appendChild(player);
 
-      // Load the SWF immediately
+      // Load and start the SWF immediately
       player.load({ url: swfURL });
     });
   </script>
