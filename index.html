@@ -8,7 +8,6 @@
   <!-- Local Ruffle -->
   <script src="ruffle/ruffle.js"></script>
 
-  <!-- Fullscreen on iPhone -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -58,7 +57,6 @@
   <div id="playerContainer"></div>
 
   <script>
-    // Create Ruffle instance
     const ruffle = window.RufflePlayer.newest();
     const container = document.getElementById("playerContainer");
     const startBtn = document.getElementById("startBtn");
@@ -66,14 +64,14 @@
 
     let swfURL = null;
 
-    // Handle file selection
+    // When the user selects a file
     fileInput.addEventListener("change", (event) => {
       const file = event.target.files[0];
       if (!file) return;
       swfURL = URL.createObjectURL(file);
     });
 
-    // Start game
+    // Start the game inside the click handler
     startBtn.addEventListener("click", () => {
       if (!swfURL) {
         alert("Please select a SWF file first!");
@@ -83,11 +81,11 @@
       // Clear previous content
       container.innerHTML = "";
 
-      // Create a Ruffle player instance
+      // Create the Ruffle player inside the click event (required for iOS)
       const player = ruffle.create_player();
       container.appendChild(player);
 
-      // Load the SWF
+      // Load the SWF immediately
       player.load({ url: swfURL });
     });
   </script>
