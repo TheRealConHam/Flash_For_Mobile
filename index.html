@@ -42,12 +42,6 @@
       cursor: pointer;
     }
 
-    button:disabled {
-      background-color: #555;
-      color: #ccc;
-      cursor: not-allowed;
-    }
-
     ruffle-player {
       width: 100%;
       height: 70%;
@@ -64,42 +58,8 @@
   <!-- File Picker -->
   <input type="file" id="fileInput" accept="*/*">
 
-  <!-- Start Game Button -->
-  <button id="startBtn" disabled>Start Game</button>
+  <!-- Start Game Button (always enabled) -->
+  <button id="startBtn">Start Game</button>
 
   <!-- Ruffle Player -->
-  <ruffle-player id="player"></ruffle-player>
-
-  <script>
-    // Create Ruffle instance
-    const ruffle = window.RufflePlayer.newest();
-    const playerContainer = document.getElementById("player");
-    const player = ruffle.create_player();
-    playerContainer.appendChild(player);
-
-    const fileInput = document.getElementById("fileInput");
-    const startBtn = document.getElementById("startBtn");
-    let swfURL = null;
-
-    // Handle file selection
-    fileInput.addEventListener("change", (event) => {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      // Create a temporary URL for the file
-      swfURL = URL.createObjectURL(file);
-
-      // Enable Start Game button
-      startBtn.disabled = false;
-    });
-
-    // Start game on button click
-    startBtn.addEventListener("click", () => {
-      if (!swfURL) return;
-
-      // Load the SWF into Ruffle
-      player.load({ url: swfURL });
-    });
-  </script>
-</body>
-</html>
+  <ruffle-player id="player"></ruff
