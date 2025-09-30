@@ -1,49 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>iPhone Flash Game Loader</title>
-  <!-- Load Ruffle from CDN -->
+  
+  <!-- Ruffle CDN -->
   <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
+
+  <!-- Fullscreen when added to Home Screen -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
   <style>
     body {
-      background: #111;
-      color: white;
-      font-family: sans-serif;
+      margin: 0;
+      height: 100vh;
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
-      height: 100vh;
-      margin: 0;
+      align-items: center;
+      background-color: #111;
+      color: white;
+      font-family: sans-serif;
       -webkit-user-select: none;
+      text-align: center;
     }
-    h1 { margin-bottom: 1rem; }
-    input[type="file"] { margin-bottom: 1rem; }
+    h1 {
+      margin-bottom: 1rem;
+    }
+    input[type="file"], button {
+      margin: 0.5rem 0;
+      padding: 0.5rem 1rem;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+    }
+    button {
+      background-color: #1a73e8;
+      color: white;
+    }
     ruffle-player {
       width: 100%;
-      height: 80%;
+      height: 70%;
       max-width: 800px;
       max-height: 600px;
       background: black;
+      margin-top: 1rem;
     }
   </style>
 </head>
 <body>
-  <h1>Load a Flash Game test</h1>
+  <h1>Load a Flash Game</h1>
+
+  <!-- File Picker -->
   <input type="file" id="fileInput" accept="*/*">
+
+  <!-- Start Game Button (hidden until file is loaded) -->
+  <button id="startBtn" style="display:none;">Start Game</button>
+
+  <!-- Ruffle Player -->
   <ruffle-player id="player"></ruffle-player>
 
   <script>
     const input = document.getElementById("fileInput");
     const player = document.getElementById("player");
+    const startBtn = document.getElementById("startBtn");
 
-    input.addEventListener("change", async (event) => {
+    // When user picks a file
+    input.addEventListener("change", (event) => {
       const file = event.target.files[0];
       if (file) {
         const url = URL.createObjectURL(file);
         player.load({ url: url });
+
+        // Show Start Game button after loading
+        startBtn.style.display = "inline-block";
       }
+    });
+
+    // Start the game on button click
+    startBtn.addEventListener("click", () => {
+      if (player.play) {
+        player.play();
+      }
+      startBtn.style.display = "none";
     });
   </script>
 </body>
