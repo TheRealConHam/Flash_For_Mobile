@@ -8,7 +8,7 @@
   <!-- Ruffle CDN -->
   <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
 
-  <!-- Fullscreen when added to Home Screen -->
+  <!-- Fullscreen on Home Screen -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
@@ -24,12 +24,9 @@
       color: white;
       font-family: sans-serif;
       text-align: center;
-      -webkit-user-select: none;
     }
 
-    h1 {
-      margin-bottom: 1rem;
-    }
+    h1 { margin-bottom: 1rem; }
 
     input[type="file"], button {
       margin: 0.5rem 0;
@@ -42,11 +39,13 @@
     button {
       background-color: #1a73e8;
       color: white;
+      cursor: pointer;
     }
 
     button:disabled {
       background-color: #555;
       color: #ccc;
+      cursor: not-allowed;
     }
 
     ruffle-player {
@@ -65,34 +64,41 @@
   <!-- File Picker -->
   <input type="file" id="fileInput" accept="*/*">
 
-  <!-- Start Game Button (disabled until file is loaded) -->
+  <!-- Start Game Button -->
   <button id="startBtn" disabled>Start Game</button>
 
   <!-- Ruffle Player -->
   <ruffle-player id="player"></ruffle-player>
 
   <script>
-    const input = document.getElementById("fileInput");
-    const player = document.getElementById("player");
+    // Create Ruffle instance
+    const ruffle = window.RufflePlayer.newest();
+    const playerContainer = document.getElementById("player");
+    const player = ruffle.create_player();
+    playerContainer.appendChild(player);
+
+    const fileInput = document.getElementById("fileInput");
     const startBtn = document.getElementById("startBtn");
+    let swfURL = null;
 
-    // When user picks a file
-    input.addEventListener("change", (event) => {
+    // Handle file selection
+    fileInput.addEventListener("change", (event) => {
       const file = event.target.files[0];
-      if (file) {
-        const url = URL.createObjectURL(file);
-        player.load({ url: url });
+      if (!file) return;
 
-        // Enable Start Game button after loading
-        startBtn.disabled = false;
-      }
+      // Create a temporary URL for the file
+      swfURL = URL.createObjectURL(file);
+
+      // Enable Start Game button
+      startBtn.disabled = false;
     });
 
-    // Start the game on button click
+    // Start game on button click
     startBtn.addEventListener("click", () => {
-      if (player.play) {
-        player.play();
-      }
+      if (!swfURL) return;
+
+      // Load the SWF into Ruffle
+      player.load({ url: swfURL });
     });
   </script>
 </body>
